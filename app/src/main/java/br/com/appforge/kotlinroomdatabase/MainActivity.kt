@@ -1,11 +1,7 @@
 package br.com.appforge.kotlinroomdatabase
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import br.com.appforge.kotlinroomdatabase.data.UsersDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
 import br.com.appforge.kotlinroomdatabase.data.model.Address
@@ -15,6 +11,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,20 +33,20 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(0,"m@gmail.com", name, "123456", 12, 20.4, Address("Street A", 50))
+            val user = User(0,"m@gmail.com", name, "123456", 12, 20.4, Address("Street A", 50), Date())
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.save(user)
             }
         }
         binding.btnRemove.setOnClickListener {
-            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4, Address("Street A", 50))
+            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4, Address("Street A", 50), Date())
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.delete(user)
             }
         }
         binding.btnUpdate.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100))
+            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100), Date())
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.update(user)
             }
@@ -58,7 +56,9 @@ class MainActivity : AppCompatActivity() {
                 val userList = userDAO.list()
                 var textUsers = ""
                 userList.forEach { user->
-                    textUsers += "${user.userId}) ${user.name} - ${user.age}\n"
+                    val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm")
+                    val formattedDate = formatter.format(user.dateOfSubscription)
+                    textUsers += "${user.userId}) ${user.name} - ${user.age} - ${formattedDate}\n"
                 }
                 withContext(Dispatchers.Main){
                     binding.textUserList.text = textUsers
@@ -71,7 +71,9 @@ class MainActivity : AppCompatActivity() {
                 val userList = userDAO.search(searchText)
                 var textUsers = ""
                 userList.forEach { user ->
-                    textUsers += "${user.userId}) ${user.name} - ${user.age}\n"
+                    val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm")
+                    val formattedDate = formatter.format(user.dateOfSubscription)
+                    textUsers += "${user.userId}) ${user.name} - ${user.age} - ${formattedDate}\n"
                 }
                 withContext(Dispatchers.Main){
                     binding.textUserList.text = textUsers

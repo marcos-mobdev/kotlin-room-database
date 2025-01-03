@@ -3,13 +3,12 @@ package br.com.appforge.kotlinroomdatabase.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.util.Date
 
 //snake case for table names
 @Entity(tableName = "users",
     //ignoredColumns = ["name", "password"]
-
     )
 data class User(
     @PrimaryKey(autoGenerate = true)
@@ -22,10 +21,9 @@ data class User(
     val weight: Double,
     //@Ignore val imc: Double,
     @Embedded
-    val address: Address
+    val address: Address,
+    val dateOfSubscription: Date //Database: Long - App: Date
     )
 
-data class Address(
-    val street:String,
-    val number:Int
-)
+
+
