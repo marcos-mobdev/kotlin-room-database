@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
     )
 class User(
     @PrimaryKey(autoGenerate = true)
-    val userId:String,
+    val userId:Int,
     val email:String,
     @ColumnInfo("firstname_surname")
     val name:String,

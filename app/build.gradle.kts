@@ -1,7 +1,9 @@
+import org.jetbrains.kotlin.fir.declarations.builder.buildScript
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
 
 android {
@@ -27,6 +29,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -44,7 +47,7 @@ dependencies {
     val roomVersion = "2.6.1"
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
     implementation("androidx.room:room-runtime:$roomVersion")
 
