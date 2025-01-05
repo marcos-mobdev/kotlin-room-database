@@ -1,6 +1,7 @@
 package br.com.appforge.kotlinroomdatabase.data
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,7 +12,8 @@ import br.com.appforge.kotlinroomdatabase.utils.DatabaseDateConverter
 
 @Database(
     entities = [User::class],
-    version = 1
+    version = 2,
+    autoMigrations = [AutoMigration(1,2)]
 )
 @TypeConverters(DatabaseDateConverter::class)
 abstract class UsersDatabase : RoomDatabase() {

@@ -33,20 +33,20 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(0,"m@gmail.com", name, "123456", 12, 20.4, Address("Street A", 50), Date())
+            val user = User(0,"m@gmail.com", name, "123456", 12, 20.4, Address("Street A", 50), Date(), "M")
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.save(user)
             }
         }
         binding.btnRemove.setOnClickListener {
-            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4, Address("Street A", 50), Date())
+            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4, Address("Street A", 50), Date(), "M")
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.delete(user)
             }
         }
         binding.btnUpdate.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100), Date())
+            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100), Date(), "M")
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.update(user)
             }

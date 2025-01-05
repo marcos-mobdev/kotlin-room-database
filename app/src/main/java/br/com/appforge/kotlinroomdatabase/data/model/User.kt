@@ -22,7 +22,9 @@ data class User(
     //@Ignore val imc: Double,
     @Embedded
     val address: Address,
-    val dateOfSubscription: Date //Database: Long - App: Date
+    val dateOfSubscription: Date, //Database: Long - App: Date
+    @ColumnInfo(defaultValue = "") //default value for DB
+    val gender: String = "", //default value for class
     )
 
 
