@@ -3,6 +3,7 @@ package br.com.appforge.kotlinroomdatabase
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.appforge.kotlinroomdatabase.data.UsersDatabase
+import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
 import br.com.appforge.kotlinroomdatabase.data.model.Address
 import br.com.appforge.kotlinroomdatabase.data.model.User
@@ -22,31 +23,43 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var usersDatabase: UsersDatabase
     private lateinit var userDAO: UserDAO
+    private lateinit var addressDAO: AddressDAO
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         usersDatabase = UsersDatabase.getInstance(this)
-        userDAO = usersDatabase.getUserDao()
+        userDAO = usersDatabase.userDao
+        addressDAO = usersDatabase.addressDao
 
 
         binding.btnSave.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(0,"m@gmail.com", name, "123456", 12, 20.4, Address("Street A", 50), Date())
+            val user = User(0,"m@gmail.com", name, "123456", 12, 20.4,
+                //Address("Street A", 50),
+                Date()
+            )
+            val address = Address(0,"Street Colorado, 20")
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.save(user)
+                addressDAO.save(address)
             }
         }
         binding.btnRemove.setOnClickListener {
-            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4, Address("Street A", 50), Date())
+            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4,
+                //Address("Street A", 50),
+                Date())
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.delete(user)
             }
         }
         binding.btnUpdate.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100), Date())
+            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4,
+                //Address("Street B", 100),
+                Date())
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.update(user)
             }
