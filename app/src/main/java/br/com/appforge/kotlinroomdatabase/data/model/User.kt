@@ -23,8 +23,8 @@ data class User(
     @Embedded
     val address: Address,
     val dateOfSubscription: Date, //Database: Long - App: Date
-    @ColumnInfo(defaultValue = "") //default value for DB
-    val gender: String = "", //default value for class
+    @ColumnInfo(name="user_gender",defaultValue = "") //default value for DB
+    val userGender: String = "", //default value for class
     )
 
 

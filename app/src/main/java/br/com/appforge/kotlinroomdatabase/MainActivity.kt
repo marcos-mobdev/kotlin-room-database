@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.btnUpdate.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100), Date(), "M")
+            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4, Address("Street B", 100), Date(), "F")
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.update(user)
             }
