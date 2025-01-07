@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.appforge.kotlinroomdatabase.data.UsersDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.CustomerOrderDAO
+import br.com.appforge.kotlinroomdatabase.data.dao.PersonComputerDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.ProductDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
+import br.com.appforge.kotlinroomdatabase.data.entity.Computer
 import br.com.appforge.kotlinroomdatabase.data.entity.Customer
 import br.com.appforge.kotlinroomdatabase.data.entity.Order
-import br.com.appforge.kotlinroomdatabase.data.entity.Product
-import br.com.appforge.kotlinroomdatabase.data.entity.ProductDetails
+import br.com.appforge.kotlinroomdatabase.data.entity.Person
+import br.com.appforge.kotlinroomdatabase.data.entity.PersonComputer
 import br.com.appforge.kotlinroomdatabase.data.entity.User
 import br.com.appforge.kotlinroomdatabase.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +24,7 @@ import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy{
+    private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addressDAO: AddressDAO
     private lateinit var productDAO: ProductDAO
     private lateinit var customerOrderDAO: CustomerOrderDAO
+    private lateinit var personComputerDAO: PersonComputerDAO
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,13 +41,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         usersDatabase = UsersDatabase.getInstance(this)
-        userDAO = usersDatabase.userDao
-        addressDAO = usersDatabase.addressDao
+        userDAO = usersDatabase.userDAO
+        addressDAO = usersDatabase.addressDAO
         productDAO = usersDatabase.productDAO
         customerOrderDAO = usersDatabase.customerOrderDAO
+        personComputerDAO = usersDatabase.personComputerDAO
 
 
         binding.btnSave.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val personId = personComputerDAO.savePerson(
+                    Person(0, "Maria", "F")
+                )
+
+                val computer1Id = personComputerDAO.saveComputer(
+                    Computer(0, "XPS 15", "Dell")
+                )
+                val computer2Id = personComputerDAO.saveComputer(
+                    Computer(0, "Macbook Pro M1", "Apple")
+                )
+
+                val personComputer1 = PersonComputer(personId, computer1Id)
+                val personComputer2 = PersonComputer(personId, computer2Id)
+                personComputerDAO.saveComputerPerson(personComputer1)
+                personComputerDAO.saveComputerPerson(personComputer2)
+
+
+            }
+
+
+            /*
             val name = binding.editName.text.toString()
             CoroutineScope(Dispatchers.IO).launch {
                 val idCustomerInserted = customerOrderDAO.saveCustomer(
@@ -55,6 +82,8 @@ class MainActivity : AppCompatActivity() {
                     customerOrderDAO.saveOrder(order)
                 }
             }
+
+             */
             /*
             val name = binding.editName.text.toString()
             CoroutineScope(Dispatchers.IO).launch {
@@ -79,30 +108,57 @@ class MainActivity : AppCompatActivity() {
              */
         }
         binding.btnRemove.setOnClickListener {
-            val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4,
+            val user = User(
+                2, "m@gmail.com", "Joao", "123456", 12, 20.4,
                 //Address("Street A", 50),
-                Date())
+                Date()
+            )
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.delete(user)
             }
         }
         binding.btnUpdate.setOnClickListener {
             val name = binding.editName.text.toString()
-            val user = User(1,"m@gmail.com", name, "123456", 12, 20.4,
+            val user = User(
+                1, "m@gmail.com", name, "123456", 12, 20.4,
                 //Address("Street B", 100),
-                Date())
+                Date()
+            )
             CoroutineScope(Dispatchers.IO).launch {
                 userDAO.update(user)
             }
         }
         binding.btnList.setOnClickListener {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val listPersonWithComputers = personComputerDAO.listPersonWithComputers()
+                var listText = ""
+                listPersonWithComputers.forEach { personWithComputers ->
+                    val personId = personWithComputers.person.personId
+                    val name = personWithComputers.person.name
+                    listText += "$personId) $name has the following:\n"
+
+                    personWithComputers.computers.forEach { computer->
+                        val computerId = computer.computerId
+                        val brand = computer.brand
+                        val model = computer.model
+                        listText += "\t$computerId) $brand - $model\n"
+                    }
+                    withContext(Dispatchers.Main){
+                        binding.textUserList.text = listText
+                    }
+                }
+            }
+
+
+            /*
             CoroutineScope(Dispatchers.IO).launch {
                 val list = customerOrderDAO.getCustomersAndOrders()
                 var listText = ""
                 list.forEach { customerAndOrder ->
                     val customerId = customerAndOrder.customer.customerId
-                    val name =customerAndOrder.customer.name
-                    val surname =customerAndOrder.customer.surname
+                    val name = customerAndOrder.customer.name
+                    val surname = customerAndOrder.customer.surname
 
                     listText += "$customerId) $name $surname has bought:\n"
                     customerAndOrder.orders.forEach { order ->
@@ -114,13 +170,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         binding.textUserList.text = listText
                     }
                 }
             }
 
-
+             */
             /*
             CoroutineScope(Dispatchers.IO).launch {
                 val userList = userDAO.list()
@@ -156,7 +212,6 @@ class MainActivity : AppCompatActivity() {
              */
 
 
-
         }
         binding.btnSearch.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -168,7 +223,7 @@ class MainActivity : AppCompatActivity() {
                     val formattedDate = formatter.format(user.dateOfSubscription)
                     textUsers += "${user.userId}) ${user.name} - ${user.age} - ${formattedDate}\n"
                 }
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     binding.textUserList.text = textUsers
                 }
             }

@@ -13,11 +13,15 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.CustomerOrderDAO
+import br.com.appforge.kotlinroomdatabase.data.dao.PersonComputerDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.ProductDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
 import br.com.appforge.kotlinroomdatabase.data.entity.Address
+import br.com.appforge.kotlinroomdatabase.data.entity.Computer
 import br.com.appforge.kotlinroomdatabase.data.entity.Customer
 import br.com.appforge.kotlinroomdatabase.data.entity.Order
+import br.com.appforge.kotlinroomdatabase.data.entity.Person
+import br.com.appforge.kotlinroomdatabase.data.entity.PersonComputer
 import br.com.appforge.kotlinroomdatabase.data.entity.Product
 import br.com.appforge.kotlinroomdatabase.data.entity.ProductDetails
 import br.com.appforge.kotlinroomdatabase.data.entity.User
@@ -27,7 +31,8 @@ import br.com.appforge.kotlinroomdatabase.utils.DatabaseDateConverter
     entities = [
                 User::class, Address::class,
                 Product::class, ProductDetails::class,
-                Customer::class, Order::class
+                Customer::class, Order::class,
+                Person::class, Computer::class, PersonComputer::class
                ],
     version = 6,
     autoMigrations = [
@@ -42,10 +47,11 @@ abstract class UsersDatabase : RoomDatabase() {
 
     //abstract fun getUserDao():UserDAO
     //Alternative:
-    abstract val userDao:UserDAO
-    abstract val addressDao:AddressDAO
+    abstract val userDAO:UserDAO
+    abstract val addressDAO:AddressDAO
     abstract val productDAO:ProductDAO
     abstract val customerOrderDAO:CustomerOrderDAO
+    abstract val personComputerDAO:PersonComputerDAO
 
     //@RenameTable(fromTableName = "users", toTableName = "users_app")
     @RenameColumn(tableName = "users", fromColumnName = "gender", toColumnName = "user_gender")
