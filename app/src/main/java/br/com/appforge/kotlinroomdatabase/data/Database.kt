@@ -3,11 +3,8 @@ package br.com.appforge.kotlinroomdatabase.data
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
-import androidx.room.Delete
 import androidx.room.DeleteColumn
-import androidx.room.DeleteTable
 import androidx.room.RenameColumn
-import androidx.room.RenameTable
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -15,13 +12,16 @@ import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
+import br.com.appforge.kotlinroomdatabase.data.dao.ProductDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
-import br.com.appforge.kotlinroomdatabase.data.model.Address
-import br.com.appforge.kotlinroomdatabase.data.model.User
+import br.com.appforge.kotlinroomdatabase.data.entity.Address
+import br.com.appforge.kotlinroomdatabase.data.entity.Product
+import br.com.appforge.kotlinroomdatabase.data.entity.ProductDetails
+import br.com.appforge.kotlinroomdatabase.data.entity.User
 import br.com.appforge.kotlinroomdatabase.utils.DatabaseDateConverter
 
 @Database(
-    entities = [User::class, Address::class],
+    entities = [User::class, Address::class, Product::class, ProductDetails::class],
     version = 6,
     autoMigrations = [
         AutoMigration(1,2),
@@ -37,6 +37,7 @@ abstract class UsersDatabase : RoomDatabase() {
     //Alternative:
     abstract val userDao:UserDAO
     abstract val addressDao:AddressDAO
+    abstract val productDAO:ProductDAO
 
     //@RenameTable(fromTableName = "users", toTableName = "users_app")
     @RenameColumn(tableName = "users", fromColumnName = "gender", toColumnName = "user_gender")
