@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "KotlinRoomDatabase"
 include(":app")
- 
+include(":room_mvvm")
