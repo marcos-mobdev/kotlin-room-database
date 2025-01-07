@@ -12,16 +12,23 @@ import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
+import br.com.appforge.kotlinroomdatabase.data.dao.CustomerOrderDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.ProductDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
 import br.com.appforge.kotlinroomdatabase.data.entity.Address
+import br.com.appforge.kotlinroomdatabase.data.entity.Customer
+import br.com.appforge.kotlinroomdatabase.data.entity.Order
 import br.com.appforge.kotlinroomdatabase.data.entity.Product
 import br.com.appforge.kotlinroomdatabase.data.entity.ProductDetails
 import br.com.appforge.kotlinroomdatabase.data.entity.User
 import br.com.appforge.kotlinroomdatabase.utils.DatabaseDateConverter
 
 @Database(
-    entities = [User::class, Address::class, Product::class, ProductDetails::class],
+    entities = [
+                User::class, Address::class,
+                Product::class, ProductDetails::class,
+                Customer::class, Order::class
+               ],
     version = 6,
     autoMigrations = [
         AutoMigration(1,2),
@@ -38,6 +45,7 @@ abstract class UsersDatabase : RoomDatabase() {
     abstract val userDao:UserDAO
     abstract val addressDao:AddressDAO
     abstract val productDAO:ProductDAO
+    abstract val customerOrderDAO:CustomerOrderDAO
 
     //@RenameTable(fromTableName = "users", toTableName = "users_app")
     @RenameColumn(tableName = "users", fromColumnName = "gender", toColumnName = "user_gender")

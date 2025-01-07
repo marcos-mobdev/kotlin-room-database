@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.appforge.kotlinroomdatabase.data.UsersDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
+import br.com.appforge.kotlinroomdatabase.data.dao.CustomerOrderDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.ProductDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
+import br.com.appforge.kotlinroomdatabase.data.entity.Customer
+import br.com.appforge.kotlinroomdatabase.data.entity.Order
 import br.com.appforge.kotlinroomdatabase.data.entity.Product
 import br.com.appforge.kotlinroomdatabase.data.entity.ProductDetails
 import br.com.appforge.kotlinroomdatabase.data.entity.User
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userDAO: UserDAO
     private lateinit var addressDAO: AddressDAO
     private lateinit var productDAO: ProductDAO
+    private lateinit var customerOrderDAO: CustomerOrderDAO
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +41,21 @@ class MainActivity : AppCompatActivity() {
         userDAO = usersDatabase.userDao
         addressDAO = usersDatabase.addressDao
         productDAO = usersDatabase.productDAO
+        customerOrderDAO = usersDatabase.customerOrderDAO
 
 
         binding.btnSave.setOnClickListener {
+            val name = binding.editName.text.toString()
+            CoroutineScope(Dispatchers.IO).launch {
+                val idCustomerInserted = customerOrderDAO.saveCustomer(
+                    Customer(0,name, "Pinheiro")
+                )
+                repeat(3){ number ->
+                    val order = Order(0,idCustomerInserted,"Product($number)", 2000.0+(50*number))
+                    customerOrderDAO.saveOrder(order)
+                }
+            }
+            /*
             val name = binding.editName.text.toString()
             CoroutineScope(Dispatchers.IO).launch {
                val idProductInserted = productDAO.saveProduct(
@@ -47,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                )
                 productDAO.saveProductDetails(ProductDetails(0,idProductInserted,"Apple", "Ultra Macbook 15"))
             }
+             */
             /*
             val name = binding.editName.text.toString()
             val user = User(0,"m@gmail.com", name, "123456", 12, 20.4,
@@ -79,6 +96,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.btnList.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val list = customerOrderDAO.getCustomersAndOrders()
+                var listText = ""
+                list.forEach { customerAndOrder ->
+                    val customerId = customerAndOrder.customer.customerId
+                    val name =customerAndOrder.customer.name
+                    val surname =customerAndOrder.customer.surname
+
+                    listText += "$customerId) $name $surname has bought:\n"
+                    customerAndOrder.orders.forEach { order ->
+                        val orderId = order.orderId
+                        val product = order.product
+                        val price = order.price
+                        listText += "\t$orderId) $product for R$ $price\n"
+                    }
+
+
+
+                    withContext(Dispatchers.Main){
+                        binding.textUserList.text = listText
+                    }
+                }
+            }
+
+
             /*
             CoroutineScope(Dispatchers.IO).launch {
                 val userList = userDAO.list()
@@ -94,6 +136,7 @@ class MainActivity : AppCompatActivity() {
             }
 
              */
+            /*
             CoroutineScope(Dispatchers.IO).launch {
                 val productList = productDAO.listProductsAndProductDetails()
                 var textUsers = ""
@@ -109,6 +152,8 @@ class MainActivity : AppCompatActivity() {
                     binding.textUserList.text = textUsers
                 }
             }
+
+             */
 
 
 
