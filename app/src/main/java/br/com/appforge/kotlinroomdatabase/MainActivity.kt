@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.appforge.kotlinroomdatabase.data.UsersDatabase
 import br.com.appforge.kotlinroomdatabase.data.dao.AddressDAO
+import br.com.appforge.kotlinroomdatabase.data.dao.ProductDAO
 import br.com.appforge.kotlinroomdatabase.data.dao.UserDAO
-import br.com.appforge.kotlinroomdatabase.data.model.Address
-import br.com.appforge.kotlinroomdatabase.data.model.User
+import br.com.appforge.kotlinroomdatabase.data.entity.Product
+import br.com.appforge.kotlinroomdatabase.data.entity.ProductDetails
+import br.com.appforge.kotlinroomdatabase.data.entity.User
 import br.com.appforge.kotlinroomdatabase.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var usersDatabase: UsersDatabase
     private lateinit var userDAO: UserDAO
     private lateinit var addressDAO: AddressDAO
+    private lateinit var productDAO: ProductDAO
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +36,18 @@ class MainActivity : AppCompatActivity() {
         usersDatabase = UsersDatabase.getInstance(this)
         userDAO = usersDatabase.userDao
         addressDAO = usersDatabase.addressDao
+        productDAO = usersDatabase.productDAO
 
 
         binding.btnSave.setOnClickListener {
+            val name = binding.editName.text.toString()
+            CoroutineScope(Dispatchers.IO).launch {
+               val idProductInserted = productDAO.saveProduct(
+                   Product(0,name, 4000.99)
+               )
+                productDAO.saveProductDetails(ProductDetails(0,idProductInserted,"Apple", "Ultra Macbook 15"))
+            }
+            /*
             val name = binding.editName.text.toString()
             val user = User(0,"m@gmail.com", name, "123456", 12, 20.4,
                 //Address("Street A", 50),
@@ -46,6 +58,8 @@ class MainActivity : AppCompatActivity() {
                 userDAO.save(user)
                 addressDAO.save(address)
             }
+
+             */
         }
         binding.btnRemove.setOnClickListener {
             val user = User(2,"m@gmail.com", "Joao", "123456", 12, 20.4,
@@ -65,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.btnList.setOnClickListener {
+            /*
             CoroutineScope(Dispatchers.IO).launch {
                 val userList = userDAO.list()
                 var textUsers = ""
@@ -77,6 +92,26 @@ class MainActivity : AppCompatActivity() {
                     binding.textUserList.text = textUsers
                 }
             }
+
+             */
+            CoroutineScope(Dispatchers.IO).launch {
+                val productList = productDAO.listProductsAndProductDetails()
+                var textUsers = ""
+                productList.forEach { productAndProductDetail->
+                    val idProduct = productAndProductDetail.product.productId
+                    val name = productAndProductDetail.product.name
+                    val brand = productAndProductDetail.productDetails.brand
+                    val description = productAndProductDetail.productDetails.description
+
+                    textUsers += "$idProduct) $name - $brand - $description\n"
+                }
+                withContext(Dispatchers.Main){
+                    binding.textUserList.text = textUsers
+                }
+            }
+
+
+
         }
         binding.btnSearch.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {

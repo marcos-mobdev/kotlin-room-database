@@ -1,4 +1,4 @@
-package br.com.appforge.kotlinroomdatabase.data.model
+package br.com.appforge.kotlinroomdatabase.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
