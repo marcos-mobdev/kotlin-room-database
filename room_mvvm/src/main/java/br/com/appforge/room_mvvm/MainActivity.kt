@@ -11,9 +11,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.MenuProvider
 import br.com.appforge.room_mvvm.data.database.AppDatabase
+import br.com.appforge.room_mvvm.data.entity.Category
 
 import br.com.appforge.room_mvvm.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +35,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initializeNavBar()
         initializeClickEvents()
+
+        //Room test
+        val categoryDAO = appDatabase.categoryDAO
+        CoroutineScope(Dispatchers.IO).launch {
+            val category = Category(0,"Market")
+            categoryDAO.save(category)
+        }
     }
 
     private fun initializeClickEvents() {
