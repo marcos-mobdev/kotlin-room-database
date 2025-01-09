@@ -19,7 +19,7 @@ interface AnnotationDAO {
     fun update(annotation: Annotation)
 
     @Delete
-    fun delete(annotation: Annotation)
+    fun delete(annotation: Annotation) : Int //Quantity of remove registers
 
     @Query("SELECT * FROM annotations")
     fun list():List<Annotation>

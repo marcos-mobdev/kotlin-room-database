@@ -36,6 +36,12 @@ class AnnotationViewModel @Inject constructor(private val annotationRepository: 
             }
         }
     }
+    fun remove(annotation: Annotation){
+        viewModelScope.launch (Dispatchers.IO){
+            val result = annotationRepository.remove(annotation)
+            _operationResult.postValue(result)
+        }
+    }
 
     fun listAnnotationAndCategory(){
         viewModelScope.launch(Dispatchers.IO) {

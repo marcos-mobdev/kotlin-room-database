@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -15,6 +16,7 @@ import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.appforge.room_mvvm.R
+import br.com.appforge.room_mvvm.data.entity.Annotation
 
 import br.com.appforge.room_mvvm.databinding.ActivityMainBinding
 import br.com.appforge.room_mvvm.presentation.viewModel.AnnotationViewModel
@@ -48,7 +50,14 @@ class MainActivity : AppCompatActivity() {
     private fun initializeUI() {
 
         with(binding){
-            annotationAdapter = AnnotationAdapter()
+
+            val onClickRemove = { annotation: Annotation ->
+                annotationViewModel.remove(annotation)
+            }
+            val onClickUpdate = { annotation: Annotation ->
+
+            }
+            annotationAdapter = AnnotationAdapter(onClickRemove, onClickUpdate)
             rvAnnotations.adapter = annotationAdapter
             rvAnnotations.layoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
         }
@@ -64,12 +73,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeObservables() {
         annotationViewModel.annotationAndCategoryList.observe(this){annotationAndCategoryList->
-
-            annotationAndCategoryList.forEach {item->
-                Log.i("info_annotations", "initializeObservables: ${item.annotation.title}")
-            }
-
             annotationAdapter.setList(annotationAndCategoryList)
+        }
+
+        annotationViewModel.operationResult.observe(this){ result ->
+            if(result.success){
+                Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
+                annotationViewModel.listAnnotationAndCategory()
+            }else{
+                Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

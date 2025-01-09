@@ -22,6 +22,19 @@ class AnnotationRepositoryImpl@Inject constructor(
         }
     }
 
+    override suspend fun remove(annotation: Annotation): OperationResult {
+        val registersQuantity = annotationDAO.delete(annotation)
+        return if(registersQuantity > 0){
+            OperationResult(
+                true, "Annotation removed successfully"
+            )
+        }else{
+            OperationResult(
+                false, "Error while removing annotation"
+            )
+        }
+    }
+
     override suspend fun listAnnotationAndCategory(): List<AnnotationAndCategory> {
         return annotationDAO.listAnnotationsWithCategories()
     }

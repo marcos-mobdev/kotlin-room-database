@@ -3,13 +3,15 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import br.com.appforge.room_mvvm.R
+import br.com.appforge.room_mvvm.data.entity.Annotation
 import br.com.appforge.room_mvvm.data.entity.relation.AnnotationAndCategory
 import br.com.appforge.room_mvvm.databinding.ItemAnnotationBinding
 import kotlin.random.Random
 
 
 class AnnotationAdapter(
-    //private val onItemClick: (br.com.appforge.room_mvvm.data.entity.Annotation) -> Unit
+    private val onClickRemove: (Annotation) -> Unit,
+    private val onClickUpdate: (Annotation) -> Unit,
 ) :
     RecyclerView.Adapter<AnnotationAdapter.AnnotationViewHolder>() {
 
@@ -37,13 +39,10 @@ class AnnotationAdapter(
                 )
             )
 
-
-            /*
-            itemView.setOnClickListener {
-                onItemClick(annotation)
+            binding.btnDeleteAnnotation.setOnClickListener {
+                onClickRemove(annotation)
             }
 
-             */
 
         }
 
