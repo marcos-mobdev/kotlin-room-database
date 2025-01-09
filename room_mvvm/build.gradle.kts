@@ -42,9 +42,15 @@ android {
 
 dependencies {
 
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // LiveData
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    //Fragment KTX
+    implementation(libs.androidx.fragment.ktx)
+
     //Room
     val roomVersion = "2.6.1"
-    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     //Hilt

@@ -1,4 +1,4 @@
-package br.com.appforge.room_mvvm
+package br.com.appforge.room_mvvm.presentation.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,14 +6,17 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.MenuProvider
+import br.com.appforge.room_mvvm.R
 import br.com.appforge.room_mvvm.data.database.AppDatabase
 import br.com.appforge.room_mvvm.data.entity.Category
 
 import br.com.appforge.room_mvvm.databinding.ActivityMainBinding
+import br.com.appforge.room_mvvm.presentation.viewModel.CategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,21 +30,12 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    @Inject
-    lateinit var appDatabase: AppDatabase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initializeNavBar()
         initializeClickEvents()
 
-        //Room test
-        val categoryDAO = appDatabase.categoryDAO
-        CoroutineScope(Dispatchers.IO).launch {
-            val category = Category(0,"Market")
-            categoryDAO.save(category)
-        }
     }
 
     private fun initializeClickEvents() {

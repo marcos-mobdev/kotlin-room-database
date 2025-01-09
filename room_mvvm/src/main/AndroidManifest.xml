@@ -10,13 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinRoomDatabase">
         <activity
-            android:name=".RegisterCategoryActivity"
+            android:name=".presentation.ui.RegisterCategoryActivity"
+            android:parentActivityName=".presentation.ui.RegisterAnnotationActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterAnnotationActivity"
+            android:name=".presentation.ui.RegisterAnnotationActivity"
+            android:parentActivityName=".presentation.ui.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

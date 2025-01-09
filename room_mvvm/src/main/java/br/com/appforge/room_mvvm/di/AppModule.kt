@@ -1,7 +1,10 @@
 package br.com.appforge.room_mvvm.di
 
 import android.content.Context
+import br.com.appforge.room_mvvm.data.dao.CategoryDAO
 import br.com.appforge.room_mvvm.data.database.AppDatabase
+import br.com.appforge.room_mvvm.data.repository.CategoryRepository
+import br.com.appforge.room_mvvm.data.repository.CategoryRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,4 +19,14 @@ object AppModule {
     fun provideDatabase(@ApplicationContext context: Context):AppDatabase{
         return AppDatabase.getInstance(context)
     }
+    @Provides
+    fun provideCategoryDAO(appDatabase: AppDatabase):CategoryDAO{
+        return appDatabase.categoryDAO
+    }
+
+    @Provides
+    fun provideCategoryRepository(categoryDAO: CategoryDAO):CategoryRepository{
+        return CategoryRepositoryImpl(categoryDAO)
+    }
+
 }

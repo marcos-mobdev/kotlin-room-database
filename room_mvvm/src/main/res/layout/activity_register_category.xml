@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterCategoryActivity">
+    tools:context=".presentation.ui.RegisterCategoryActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/InputCategoryName"
@@ -27,7 +27,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSaveCategory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

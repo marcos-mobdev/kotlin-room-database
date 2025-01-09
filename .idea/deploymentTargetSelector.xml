@@ -15,7 +15,7 @@
       </SelectionState>
       <SelectionState runConfigName="room_mvvm">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-01-08T22:47:00.199370100Z">
+        <DropdownSelection timestamp="2025-01-09T00:09:13.463055Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Marcos\.android\avd\Pixel_4a_API_30_1.avd" />
