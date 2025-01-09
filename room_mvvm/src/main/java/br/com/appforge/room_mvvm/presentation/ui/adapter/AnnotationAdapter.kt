@@ -1,8 +1,11 @@
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import br.com.appforge.room_mvvm.R
 import br.com.appforge.room_mvvm.data.entity.relation.AnnotationAndCategory
 import br.com.appforge.room_mvvm.databinding.ItemAnnotationBinding
+import kotlin.random.Random
 
 
 class AnnotationAdapter(
@@ -27,6 +30,12 @@ class AnnotationAdapter(
             binding.textAnnotationTitle.text = annotation.title
             binding.textAnnotationDescription.text = annotation.description
             binding.textAnnotationCategory.text = category.name
+            binding.cardItem.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    getRandomColor()
+                )
+            )
 
 
             /*
@@ -35,6 +44,20 @@ class AnnotationAdapter(
             }
 
              */
+
+        }
+
+        private fun getRandomColor(): Int {
+            val colorList = listOf(
+                R.color.pastelYellow,
+                R.color.pastelOrange,
+                R.color.pastelPurple,
+                R.color.pastelBlue
+            )
+
+            val colorPositionDrawn = Random.nextInt(colorList.size)
+
+            return colorList[colorPositionDrawn]
 
         }
     }

@@ -4,4 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="warning">#800D0D</color>
     <color name="backgroundAlternative">#E6E6E6</color>
+
+    <!-- pastel -->
+    <color name="pastelOrange">#FFE9D0</color>
+    <color name="pastelYellow">#FFFED3</color>
+    <color name="pastelPurple">#B1AFFF</color>
+    <color name="pastelBlue">#BBE9FF</color>
 </resources>
