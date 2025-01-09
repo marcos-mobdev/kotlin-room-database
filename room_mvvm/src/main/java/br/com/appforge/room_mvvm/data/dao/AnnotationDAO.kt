@@ -11,7 +11,7 @@ import br.com.appforge.room_mvvm.data.entity.Annotation
 interface AnnotationDAO {
 
     @Insert
-    fun save(annotation: Annotation) :Long
+    fun save(annotation: Annotation):Long
 
     @Update
     fun update(annotation: Annotation)
