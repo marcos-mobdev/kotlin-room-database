@@ -1,5 +1,6 @@
 package br.com.appforge.room_mvvm.presentation.ui
 
+import AnnotationAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,17 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.appforge.room_mvvm.R
-import br.com.appforge.room_mvvm.data.database.AppDatabase
-import br.com.appforge.room_mvvm.data.entity.Category
 
 import br.com.appforge.room_mvvm.databinding.ActivityMainBinding
-import br.com.appforge.room_mvvm.presentation.viewModel.CategoryViewModel
+import br.com.appforge.room_mvvm.presentation.viewModel.AnnotationViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -30,17 +27,49 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private lateinit var annotationAdapter:AnnotationAdapter
+    private val annotationViewModel: AnnotationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        initializeNavBar()
-        initializeClickEvents()
+
+        initializeUI()
+        initializeListeners()
+        initializeObservables()
 
     }
 
-    private fun initializeClickEvents() {
+    override fun onStart() {
+        super.onStart()
+        annotationViewModel.listAnnotationAndCategory()
+    }
+
+    private fun initializeUI() {
+
+        with(binding){
+            annotationAdapter = AnnotationAdapter()
+            rvAnnotations.adapter = annotationAdapter
+            rvAnnotations.layoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+        }
+
+        initializeNavBar()
+    }
+
+    private fun initializeListeners() {
         binding.fabAdd.setOnClickListener{
             startActivity(Intent(this, RegisterAnnotationActivity::class.java))
+        }
+    }
+
+    private fun initializeObservables() {
+        annotationViewModel.annotationAndCategoryList.observe(this){annotationAndCategoryList->
+
+            annotationAndCategoryList.forEach {item->
+                Log.i("info_annotations", "initializeObservables: ${item.annotation.title}")
+            }
+
+            annotationAdapter.setList(annotationAndCategoryList)
         }
     }
 
@@ -62,7 +91,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        Log.i("info_search", "onQueryTextChange: $newText ")
+                        if(newText != null){
+                            annotationViewModel.searchAnnotationAndCategory(newText)
+                        }
                         return true
                     }
                 })

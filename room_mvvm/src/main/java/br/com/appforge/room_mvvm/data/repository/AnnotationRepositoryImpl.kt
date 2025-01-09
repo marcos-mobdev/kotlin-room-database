@@ -2,6 +2,7 @@ package br.com.appforge.room_mvvm.data.repository
 
 import br.com.appforge.room_mvvm.data.dao.AnnotationDAO
 import br.com.appforge.room_mvvm.data.entity.Annotation
+import br.com.appforge.room_mvvm.data.entity.relation.AnnotationAndCategory
 import javax.inject.Inject
 
 class AnnotationRepositoryImpl@Inject constructor(
@@ -19,5 +20,13 @@ class AnnotationRepositoryImpl@Inject constructor(
                 false, "Error adding annotation"
             )
         }
+    }
+
+    override suspend fun listAnnotationAndCategory(): List<AnnotationAndCategory> {
+        return annotationDAO.listAnnotationsWithCategories()
+    }
+
+    override suspend fun searchAnnotationAndcategory(searchText:String): List<AnnotationAndCategory> {
+        return annotationDAO.searchAnnotationsWithCategories(searchText)
     }
 }
