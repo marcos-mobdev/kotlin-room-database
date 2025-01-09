@@ -35,7 +35,7 @@ class AnnotationViewModel @Inject constructor(private val annotationRepository: 
             _operationResult.value = OperationResult(false, "Annotation title cannot be empty")
             return false
         }
-        if(annotation.categoryId.toString().isEmpty()){
+        if(annotation.categoryId <= 0L){
             _operationResult.value = OperationResult(false, "Please, select a category")
             return false
         }

@@ -14,4 +14,9 @@ class CategoryRepositoryImpl @Inject constructor
             OperationResult(false, "Error while registering category")
         }
     }
+
+    override suspend fun list(): List<Category> {
+        return categoryDAO.list()
+    }
+
 }

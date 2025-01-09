@@ -21,10 +21,22 @@ class CategoryViewModel@Inject constructor(
     val operationResult : LiveData<OperationResult>
         get() = _operationResult
 
+    private val _categoryList = MutableLiveData<List<Category>>()
+    val categoryList : LiveData<List<Category>>
+        get() = _categoryList
+
+
     fun save(category: Category){
         viewModelScope.launch (Dispatchers.IO){
             val operationResult = categoryRepository.save(category)
             _operationResult.postValue(operationResult)
+        }
+    }
+
+    fun list(){
+        viewModelScope.launch (Dispatchers.IO){
+            val list = categoryRepository.list()
+            _categoryList.postValue(list)
         }
     }
 
