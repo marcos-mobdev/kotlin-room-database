@@ -22,6 +22,20 @@ class AnnotationRepositoryImpl@Inject constructor(
         }
     }
 
+    override suspend fun update(annotation: Annotation): OperationResult {
+        val registersQuantity = annotationDAO.update(annotation)
+        return if(registersQuantity > 0){
+            OperationResult(
+                true, "Annotation updated successfully"
+            )
+        }else{
+            OperationResult(
+                false, "Error while updating annotation"
+            )
+        }
+    }
+
+
     override suspend fun remove(annotation: Annotation): OperationResult {
         val registersQuantity = annotationDAO.delete(annotation)
         return if(registersQuantity > 0){

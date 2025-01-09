@@ -1,9 +1,11 @@
 package br.com.appforge.room_mvvm.data.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 
 @Entity(tableName = "annotations",
@@ -15,6 +17,7 @@ import androidx.room.PrimaryKey
         )
     ])
 
+@Parcelize
 data class Annotation(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("annotation_id")
@@ -23,4 +26,4 @@ data class Annotation(
     val categoryId:Long,
     val title:String,
     val description:String
-)
+):Parcelable

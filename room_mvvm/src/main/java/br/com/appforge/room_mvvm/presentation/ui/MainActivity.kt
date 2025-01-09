@@ -55,7 +55,9 @@ class MainActivity : AppCompatActivity() {
                 annotationViewModel.remove(annotation)
             }
             val onClickUpdate = { annotation: Annotation ->
-
+                val intent = Intent(applicationContext, RegisterAnnotationActivity::class.java)
+                intent.putExtra("annotation", annotation)
+                startActivity(intent)
             }
             annotationAdapter = AnnotationAdapter(onClickRemove, onClickUpdate)
             rvAnnotations.adapter = annotationAdapter

@@ -1,6 +1,7 @@
 package br.com.appforge.room_mvvm.presentation.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -24,6 +25,7 @@ class RegisterAnnotationActivity : AppCompatActivity() {
     private val categoryViewModel: CategoryViewModel by viewModels()
     private lateinit var spinnerAdapter:ArrayAdapter<String>
     private lateinit var categoryList:List<Category>
+    private var annotation:Annotation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +43,25 @@ class RegisterAnnotationActivity : AppCompatActivity() {
 
     private fun initializeUI() {
         with(binding){
+
+            val bundle = intent.extras
+            if (bundle != null){
+                annotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getParcelable("annotation", Annotation::class.java)
+                }else{
+                    bundle.getParcelable("annotation")
+                }
+
+                if (annotation != null){
+                    binding.editAnnotationTitle.setText(annotation!!.title)
+                    binding.editAnnotationDescription.setText(annotation!!.description)
+                }
+            }
+
+
+
             spinnerAdapter = ArrayAdapter(
-                applicationContext,android.R.layout.simple_spinner_dropdown_item,
+                applicationContext,android.R.layout.simple_spinner_dropdown_item, mutableListOf()
             )
             spinnerCategory.adapter = spinnerAdapter
         }
@@ -64,12 +83,17 @@ class RegisterAnnotationActivity : AppCompatActivity() {
                 val selectedCategoryPosition = spinnerCategory.selectedItemPosition
                 if(selectedCategoryPosition > 0){
                     val category = categoryList[selectedCategoryPosition-1]
-                    categoryId = category.categoryId.toLong()
+                    categoryId = category.categoryId
                 }
 
 
-                val annotation = Annotation(0,categoryId,title,description)
-                annotationViewModel.save(annotation)
+                if(annotation != null ){ //Editing
+                    val annotation = Annotation(annotation!!.annotationId,categoryId,title,description)
+                    annotationViewModel.update(annotation)
+                }else{
+                    val annotation = Annotation(0,categoryId,title,description)
+                    annotationViewModel.save(annotation)
+                }
             }
 
 
@@ -83,7 +107,7 @@ class RegisterAnnotationActivity : AppCompatActivity() {
         annotationViewModel.operationResult.observe(this){ result ->
             if(result.success){
                 Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
-
+                finish()
             }else{
                 Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -98,6 +122,23 @@ class RegisterAnnotationActivity : AppCompatActivity() {
             spinnerList.addAll(categoryTitleList)
             spinnerAdapter.clear()
             spinnerAdapter.addAll(spinnerList)
+
+            //EDIT
+            var annotationSelectedPosition = 0
+            if(annotation != null){
+                val idCategoryAnnotationEdit = annotation!!.categoryId
+                var currentPosition = 0
+                categoryList.forEach { category->
+                    if(category.categoryId == idCategoryAnnotationEdit){
+                        annotationSelectedPosition = currentPosition + 1
+                        return@forEach
+                    }
+                    currentPosition++
+                }
+
+            }
+            binding.spinnerCategory.setSelection(annotationSelectedPosition)
+
         }
 
     }

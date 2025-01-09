@@ -16,7 +16,7 @@ interface AnnotationDAO {
     fun save(annotation: Annotation):Long
 
     @Update
-    fun update(annotation: Annotation)
+    fun update(annotation: Annotation) :Int
 
     @Delete
     fun delete(annotation: Annotation) : Int //Quantity of remove registers
