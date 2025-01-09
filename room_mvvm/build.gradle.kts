@@ -52,12 +52,11 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
 
     //Room
-    val roomVersion = "2.6.1"
-    kapt("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -65,6 +64,12 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
+
+    //Room Tests
+    androidTestImplementation(libs.androidx.room.testing)
+    androidTestImplementation(libs.truth)
+
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
