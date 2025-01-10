@@ -24,6 +24,15 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+      <SelectionState runConfigName="saveCategory_checkRegisteredCategory_returnTrue()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="saveAnnotation_checkRegisteredAnnotation_returnTrue()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Tests in 'br'">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
